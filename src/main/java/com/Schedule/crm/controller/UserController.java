@@ -4,7 +4,10 @@ package com.Schedule.crm.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,73 +24,66 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.Optional;
 
-import com.Schedule.crm.Entity.Client;
-import com.Schedule.crm.service.ClientService;
+
+import com.Schedule.crm.Entity.User;
+import com.Schedule.crm.service.UserService;
+
+
 
 
 @RestController
-@RequestMapping("/client")
-public class ClientController {
-	
-	
+@RequestMapping("/user")
+public class UserController {
 	@Autowired
-	ClientService clientService;
+	UserService userService;
 	
-
 	@GetMapping
-	public List<Client> getAll() {
-	  return clientService.getAll();
+	public List<User> getAlList(){
+		return userService.getAlList();
 	}
-	
 	@GetMapping("/{id}")
-	public ResponseEntity <Client> getById(@PathVariable Long id) {
-		Optional <Client> cliente = clientService.findById(id);
-		if(!cliente.isPresent()) {
+	public ResponseEntity <User> getById( @PathVariable long id) {
+		Optional<User> user = userService.findById(id);
+		if(!user.isPresent()) {
 			return ResponseEntity.notFound().build();
+		
 		}
-		return ResponseEntity.ok().body(cliente.get());	
+		return ResponseEntity.ok().body(user.get());	
 	}
 	@PostMapping
 	@ResponseStatus (HttpStatus.CREATED)
-	public Client post(@RequestBody @Valid Client response) {
-		return  clientService.salve(response);
+	public User post(@RequestBody @Valid User response) {
+		 return userService.salve(response);	
 	}
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable long id) {
-		Optional<Client> client = clientService.findById(id);
-		if (!client.isPresent()) {
-			return "cliente nao encontrado";
+		Optional<User> user = userService.findById(id);
+		if(!user.isPresent()) {
+			return "Usuario não encontrado";
 		}
-		clientService.delete(id);
-	   return "deletado com sucesso";
-	   
+		userService.delete(id);
+		return "deletado com sucesso";
 	}
-	
 	@PutMapping
-	public String update(@RequestBody Client response) {
-		Optional<Client> client = clientService.findById(response.getId());
-		if (!client.isPresent()) {
-			return "cliente nao encontrado";
+	public String update(@RequestBody User response) {
+		Optional<User> user= userService.findById(response.getId());
+		if(!user.isPresent()) {
+			return "Usuario  não encontrado";
 		}
-		Client save = clientService.salve(response);
-	   return "atualizado com sucesso";	   
+	User save = userService.salve(response);
+	 return "atulizado com sucesso";
 	}
-	
-
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public Map<String,String> handleValidationException(MethodArgumentNotValidException ex){
-		Map<String, String> errors = new HashMap<>();
-		ex.getBindingResult().getAllErrors().forEach((error) -> {
+		Map<String,String>errors= new HashMap<>();
+		ex.getBindingResult().getAllErrors().forEach((error) ->{
 			String fieldName =((FieldError) error).getField();
 			String errorsMessage = ( error).getDefaultMessage();
 			errors.put(fieldName, errorsMessage);
-		});
-		
+		});		
 		return errors;
+		}
 	}
-	
-	
-}
+
