@@ -25,9 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.Schedule.crm.DTO.UserDTO;
 import com.Schedule.crm.Entity.User;
 import com.Schedule.crm.service.UserService;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import net.bytebuddy.asm.Advice.This;
 
 
 
@@ -38,42 +42,51 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
+	
 	@GetMapping
-	public List<User> getAlList(){
-		return userService.getAlList();
+	public List<UserDTO> getAlList(){
+		List<User> user = userService.getAlList();
+		return UserDTO.convert(user);
 	}
-	@GetMapping("/{id}")
-	public ResponseEntity <User> getById( @PathVariable long id) {
-		Optional<User> user = userService.findById(id);
-		if(!user.isPresent()) {
-			return ResponseEntity.notFound().build();
+	
+	@GetMapping(value = "/{id}")
+	public UserDTO getById( @PathVariable Long id) {
 		
-		}
-		return ResponseEntity.ok().body(user.get());	
+		UserDTO dto = userService.findById(id);
+		//if(!user.isPresent()) {
+		//	return ResponseEntity.notFound().build();
+		
+//	}
+	//	return ResponseEntity.ok().body(user.get());	
+		return dto;
 	}
+	
 	@PostMapping
 	@ResponseStatus (HttpStatus.CREATED)
-	public User post(@RequestBody @Valid User response) {
-		 return userService.salve(response);	
+	public User post(@RequestBody @Valid UserDTO user) {
+		 return userService.salve(user);	
 	}
+	
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable long id) {
-		Optional<User> user = userService.findById(id);
-		if(!user.isPresent()) {
-			return "Usuario não encontrado";
-		}
-		userService.delete(id);
+		UserDTO user = userService.findById(id);
+		//if(!user.isPresent()) {
+		//	return "Usuario não encontrado";
+		//}
+	//	userService.delete(id);
 		return "deletado com sucesso";
 	}
+	
 	@PutMapping
-	public String update(@RequestBody User response) {
-		Optional<User> user= userService.findById(response.getId());
-		if(!user.isPresent()) {
-			return "Usuario  não encontrado";
-		}
+	public String update(@RequestBody UserDTO response) {
+		UserDTO dto= userService.findById(response.getId());
+		//if(!user.isPresent()) {
+		//	return "Usuario  não encontrado";
+		//}
 	User save = userService.salve(response);
 	 return "atulizado com sucesso";
 	}
+	
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public Map<String,String> handleValidationException(MethodArgumentNotValidException ex){
@@ -85,5 +98,6 @@ public class UserController {
 		});		
 		return errors;
 		}
+	
 	}
 

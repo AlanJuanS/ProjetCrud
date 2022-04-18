@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -15,9 +18,12 @@ import javax.validation.constraints.NotNull;
 
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
 @Entity
+@Table(name = "client")
+@Accessors(chain = true)
 public class Client {
 	
 	@Id
@@ -29,32 +35,30 @@ public class Client {
 	private String name;
 	
 	@Column(length = 255)
-	@NotEmpty(message = "Campo origin obrigatorio")
-	
+	//@NotEmpty(message = "Campo origin obrigatorio")
 	private String origin;
 	
-	@NotNull(message = "Campo dateTimeCreate obrigatorio")
+	@Column(columnDefinition = "date default now()")
 	private  Date dateTimeCreate;
-	@NotBlank
+	
 	@Column(length = 255)
-	@NotEmpty(message = "Campo description obrigatorio")
+	//@NotEmpty(message = "Campo description obrigatorio")
 	private String description;
 	
 	@Column(length = 255)
-	@NotNull(message = "Campo dateTimeUpdate obrigatorio" )
+	//@NotNull(message = "Campo dateTimeUpdate obrigatorio" )
 	private Date dateTimeUpdate;
 	
 	@Column(length = 255)
-	@NotEmpty(message = "Campo searchlmmobile obrigatorio")
-	@NotNull
+	//@NotEmpty(message = "Campo searchlmmobile obrigatorio")
 	private String searchlmmobile;
 	
 	@Column(length = 15)
 	@NotEmpty(message = "Campo tell obrigatorio")
-	@NotNull
 	private String tell;
 	
-	@NotEmpty(message = "campo idUser obrigatorio")
-	@NotNull
-	private String idUser;	
+	//@NotEmpty
+	@ManyToOne
+	@JoinColumn(name = "user_Id", nullable = false)
+	private User user;
 }
