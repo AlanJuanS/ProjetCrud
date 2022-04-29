@@ -8,13 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.Schedule.crm.DTO.ClientCreateDTO;
-import com.Schedule.crm.DTO.ClientDTO;
+
 import com.Schedule.crm.DTO.UserCreateDTO;
 import com.Schedule.crm.DTO.UserDTO;
-import com.Schedule.crm.DTO.UserFindyByIdDTO;
 import com.Schedule.crm.DTO.UserUpdateDTO;
-import com.Schedule.crm.Entity.Client;
 import com.Schedule.crm.Entity.User;
 import com.Schedule.crm.Repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,8 +26,6 @@ public class UserService {
 	@Autowired
 	private ObjectMapper objectMapper;
 	
-	
-	
 	public List<User> getAlList(){
 		return userRepository.findAll();
 	}
@@ -40,11 +35,9 @@ public class UserService {
 		UserDTO dto = new UserDTO(entity);
 		return dto;
 	}
-	
-	
-	public User create(UserDTO userDto) {
-		userDto.setId(null);
-		return userRepository.save(userDto);
+	public User create(UserCreateDTO user) {
+		return userRepository.save(objectMapper.convertValue(user,User.class));
+		
 	}
 	
 	public void delete(long id) {
@@ -55,4 +48,9 @@ public class UserService {
 		User response = userRepository.findById(id).get();
 		UserDTO dto = new UserDTO(response);
 		}	
+	public User update(UserUpdateDTO user) {
+		return userRepository.save(objectMapper.convertValue(user,User.class));
+		
+	}
+
 	}

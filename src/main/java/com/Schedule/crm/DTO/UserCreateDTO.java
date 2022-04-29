@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class UserCreateDTO {
 
 	
-	private  Long id;
+	
 	private String name;
 	private String cpf;
 	private boolean primeiroAcesso;
@@ -20,7 +20,6 @@ public class UserCreateDTO {
 	
 	public UserCreateDTO(User user) {
 		super();
-		this.id = user.getId();
 		this.name = user.getName();
 		this.cpf = user.getCpf();
 		this.primeiroAcesso = user.isPrimeiroAcesso();

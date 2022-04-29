@@ -13,10 +13,8 @@ import org.springframework.stereotype.Service;
 import com.Schedule.crm.DTO.ClientCreateDTO;
 import com.Schedule.crm.DTO.ClientDTO;
 import com.Schedule.crm.DTO.ClientFindyByIdDTO;
-import com.Schedule.crm.DTO.ClientListDTO;
 import com.Schedule.crm.DTO.ClientUpdateDTO;
 import com.Schedule.crm.DTO.UserDTO;
-import com.Schedule.crm.DTO.UserFindyByIdDTO;
 import com.Schedule.crm.Entity.Client;
 import com.Schedule.crm.Entity.User;
 import com.Schedule.crm.Repository.ClientRepository;
@@ -67,16 +65,9 @@ public class ClientService {
 	  clientRepository.deleteById(id);
 	}
 	
-	public Client update( ClientDTO client) {
-		ClientFindyByIdDTO clientDto = this.findById(client.getId());
-		if(client != null) {			
-			 return clientRepository.save(objectMapper.convertValue(client,Client.class));
-			}
-		return null;
-		
+	public Client update(ClientUpdateDTO client) {
+		return clientRepository.save(objectMapper.convertValue(client,Client.class));
 		}
 	}
-	
-	
 
 

@@ -5,8 +5,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.ServletSecurityElement;
 import javax.validation.Valid;
 
 
@@ -23,19 +21,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.Schedule.crm.DTO.ClientFindyByIdDTO;
 import com.Schedule.crm.DTO.UserCreateDTO;
 import com.Schedule.crm.DTO.UserDTO;
-import com.Schedule.crm.DTO.UserFindyByIdDTO;
 import com.Schedule.crm.DTO.UserListDTO;
 import com.Schedule.crm.DTO.UserUpdateDTO;
 import com.Schedule.crm.Entity.User;
 import com.Schedule.crm.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 
@@ -46,6 +41,8 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	private ObjectMapper objectMapper;
 	
 	@GetMapping
 	public List<UserListDTO> getAlList(){
@@ -64,13 +61,12 @@ public class UserController {
 		return dto;
 	}
 	
-
 	@PostMapping
 	@ResponseStatus (HttpStatus.CREATED)
-	public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO user){
+	public ResponseEntity<UserCreateDTO> create(@RequestBody @Valid UserCreateDTO user){
 		URI uri = ServletUriComponentsBuilder	
 				.fromCurrentRequest().path("/{id}").buildAndExpand(userService.create(user).getId()).toUri();
-		return ResponseEntity.created(uri).body(user);
+		return ResponseEntity.created(uri).build();
 	}
 				
 	@DeleteMapping("/{id}")
@@ -82,15 +78,12 @@ public class UserController {
 	//	userService.delete(id);
 		return "deletado com sucesso";
 	}
-	
-	@PutMapping
-	public String update(@RequestBody UserDTO response) {
-		UserDTO dto = userService.findById(response.getId());
-		//if(!user.isPresent()) {
-		//	return "Usuario  não encontrado";s
-		//}
-	User save = userService.update(response);
-	// return "atulizado com sucesso";
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<UserUpdateDTO> update(@PathVariable long id, @RequestBody UserUpdateDTO user) {
+		user.setId(id);
+		User newUser = userService.update(user);
+		return ResponseEntity.ok().body(objectMapper.convertValue(newUser, UserUpdateDTO.class));
+		
 	}
 	
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

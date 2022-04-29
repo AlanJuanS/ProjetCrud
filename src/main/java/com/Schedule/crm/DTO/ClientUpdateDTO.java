@@ -3,6 +3,8 @@ package com.Schedule.crm.DTO;
 import java.sql.Date;
 
 import com.Schedule.crm.Entity.Client;
+import com.Schedule.crm.Entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,9 +24,11 @@ public class ClientUpdateDTO {
 	private Date dateTimeUpdate;
 	private String searchlmmobile;	
 	private String tell;
+	
+	private User user;
+	
 
 	public ClientUpdateDTO(Client client) {
-		super();
 		this.id = client.getId();
 		this.name = client.getName();
 		this.origin = client.getOrigin();
@@ -33,6 +37,7 @@ public class ClientUpdateDTO {
 		this.dateTimeUpdate =client.getDateTimeUpdate();
 		this.searchlmmobile =client.getSearchlmmobile();
 		this.tell = client.getTell();
+		this.user = client.getUser();
 	}
 	
 	
