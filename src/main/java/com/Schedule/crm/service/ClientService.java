@@ -3,24 +3,25 @@ package com.Schedule.crm.service;
 
 
 import java.util.List;
-import java.util.Optional;
 
-import javax.persistence.Transient;
-import javax.transaction.Transactional;
 
-import org.apache.catalina.mapper.Mapper;
-import org.apache.catalina.startup.ClassLoaderFactory.Repository;
-import org.hibernate.mapping.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.Schedule.crm.DTO.ClientCreateDTO;
 import com.Schedule.crm.DTO.ClientDTO;
+import com.Schedule.crm.DTO.ClientFindyByIdDTO;
+import com.Schedule.crm.DTO.ClientListDTO;
+import com.Schedule.crm.DTO.ClientUpdateDTO;
 import com.Schedule.crm.DTO.UserDTO;
+import com.Schedule.crm.DTO.UserFindyByIdDTO;
 import com.Schedule.crm.Entity.Client;
 import com.Schedule.crm.Entity.User;
 import com.Schedule.crm.Repository.ClientRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @Component
 @Service
@@ -36,29 +37,26 @@ public class ClientService {
 	private ObjectMapper objectMapper;
 	
 	
-		
-	public List<Client> getAll(){
+	public List<Client>ClientListDTO() {
 		return clientRepository.findAll();
+		
 	}
 	
-	public ClientDTO findById(Long id) {
+	public ClientFindyByIdDTO findById(Long id) {
 		Client entity = clientRepository.findById(id).get();
-		ClientDTO dto = new ClientDTO(entity);
+		ClientFindyByIdDTO dto = new ClientFindyByIdDTO(entity);
 		return dto;
 	}
-	
 	
 	public Client convertDtoForEntity(ClientDTO client) {
 		 Client newClient = new Client();
 		 newClient.setId(client.getId());
 		 newClient.setName(client.getName());
 		return newClient;
-		
 	}
 	
-	
-	public Client create(ClientDTO clientDto) {
-		UserDTO userDto = userService.findById(clientDto.getUser().getId());
+	public Client create(ClientCreateDTO clientDto) {
+	UserDTO userDto = userService.findById(clientDto.getUser().getId());
 		User user = objectMapper.convertValue(userDto,User.class);
 		Client client = objectMapper.convertValue(clientDto,Client.class);
 		client.setUser(user);
@@ -69,12 +67,16 @@ public class ClientService {
 	  clientRepository.deleteById(id);
 	}
 	
-	public Client update(ClientDTO client) {
-		ClientDTO clientDto = this.findById(client.getId());
+	public Client update( ClientDTO client) {
+		ClientFindyByIdDTO clientDto = this.findById(client.getId());
 		if(client != null) {			
-			return clientRepository.save(objectMapper.convertValue(client,Client.class));
+			 return clientRepository.save(objectMapper.convertValue(client,Client.class));
+			}
+		return null;
+		
 		}
-		  return null;
-	}		
-}
+	}
+	
+	
+
 

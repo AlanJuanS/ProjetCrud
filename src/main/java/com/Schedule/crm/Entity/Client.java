@@ -11,9 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+
 
 
 
@@ -38,7 +37,7 @@ public class Client {
 	//@NotEmpty(message = "Campo origin obrigatorio")
 	private String origin;
 	
-	@Column(columnDefinition = "date default now()")
+	@Column
 	private  Date dateTimeCreate;
 	
 	@Column(length = 255)

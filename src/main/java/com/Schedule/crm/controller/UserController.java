@@ -1,13 +1,14 @@
 package com.Schedule.crm.controller;
 
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+import javax.servlet.ServletSecurityElement;
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,16 +23,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.Schedule.crm.DTO.ClientFindyByIdDTO;
+import com.Schedule.crm.DTO.UserCreateDTO;
 import com.Schedule.crm.DTO.UserDTO;
+import com.Schedule.crm.DTO.UserFindyByIdDTO;
+import com.Schedule.crm.DTO.UserListDTO;
+import com.Schedule.crm.DTO.UserUpdateDTO;
 import com.Schedule.crm.Entity.User;
 import com.Schedule.crm.service.UserService;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import net.bytebuddy.asm.Advice.This;
 
 
 
@@ -44,14 +48,13 @@ public class UserController {
 	
 	
 	@GetMapping
-	public List<UserDTO> getAlList(){
+	public List<UserListDTO> getAlList(){
 		List<User> user = userService.getAlList();
-		return UserDTO.convert(user);
+		return UserListDTO.convert(user);
 	}
 	
 	@GetMapping(value = "/{id}")
 	public UserDTO getById( @PathVariable Long id) {
-		
 		UserDTO dto = userService.findById(id);
 		//if(!user.isPresent()) {
 		//	return ResponseEntity.notFound().build();
@@ -61,12 +64,15 @@ public class UserController {
 		return dto;
 	}
 	
+
 	@PostMapping
 	@ResponseStatus (HttpStatus.CREATED)
-	public User post(@RequestBody @Valid UserDTO user) {
-		 return userService.salve(user);	
+	public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO user){
+		URI uri = ServletUriComponentsBuilder	
+				.fromCurrentRequest().path("/{id}").buildAndExpand(userService.create(user).getId()).toUri();
+		return ResponseEntity.created(uri).body(user);
 	}
-	
+				
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable long id) {
 		UserDTO user = userService.findById(id);
@@ -79,12 +85,12 @@ public class UserController {
 	
 	@PutMapping
 	public String update(@RequestBody UserDTO response) {
-		UserDTO dto= userService.findById(response.getId());
+		UserDTO dto = userService.findById(response.getId());
 		//if(!user.isPresent()) {
-		//	return "Usuario  não encontrado";
+		//	return "Usuario  não encontrado";s
 		//}
-	User save = userService.salve(response);
-	 return "atulizado com sucesso";
+	User save = userService.update(response);
+	// return "atulizado com sucesso";
 	}
 	
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
