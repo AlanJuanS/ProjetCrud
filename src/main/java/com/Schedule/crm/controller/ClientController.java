@@ -56,10 +56,6 @@ public class ClientController {
 	@GetMapping(value = "/{id}")
 	public  ClientFindyByIdDTO getById(@PathVariable Long id) {
 		ClientFindyByIdDTO dto = clientService.findById(id);
-		//if(!cliente.isPresent()) {
-		//	return ResponseEntity.notFound().build();
-		//}
-	//	return ResponseEntity.ok().body(cliente.get());	
 		return dto;
 	}
 	
@@ -74,9 +70,6 @@ public class ClientController {
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable long id) {
 		ClientFindyByIdDTO dto = clientService.findById(id);
-		//if (!dto.isPresent()) {
-			//return "cliente nao encontrado";
-		//}
 		clientService.delete(id);
 	   return "deletado com sucesso";
 	   
@@ -86,21 +79,7 @@ public class ClientController {
 		client.setId(id);
 		Client newClient = clientService.update(client);
 		return ResponseEntity.ok().body(objectMapper.convertValue(newClient, ClientUpdateDTO.class));
-		
 	}
-	/*@PutMapping
-	public String update( @RequestBody ClientDTO response) {
-		 clientService.update(response);
-		return "atualizado com sucesso";
-		
-	}*/
-
-//	@PutMapping
-//	public String update(@RequestBody ClientUpdateDTO response) {
-//	clientService.update(response);
-//	   return "atualizado com sucesso";	 
-	   
-//}
 	
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)

@@ -32,9 +32,6 @@ import com.Schedule.crm.Entity.User;
 import com.Schedule.crm.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -52,12 +49,7 @@ public class UserController {
 	
 	@GetMapping(value = "/{id}")
 	public UserDTO getById( @PathVariable Long id) {
-		UserDTO dto = userService.findById(id);
-		//if(!user.isPresent()) {
-		//	return ResponseEntity.notFound().build();
-		
-//	}
-	//	return ResponseEntity.ok().body(user.get());	
+		UserDTO dto = userService.findById(id);	
 		return dto;
 	}
 	
@@ -72,10 +64,6 @@ public class UserController {
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable long id) {
 		UserDTO user = userService.findById(id);
-		//if(!user.isPresent()) {
-		//	return "Usuario não encontrado";
-		//}
-	//	userService.delete(id);
 		return "deletado com sucesso";
 	}
 	@PutMapping(value = "/{id}")

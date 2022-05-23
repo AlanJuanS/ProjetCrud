@@ -46,6 +46,9 @@ public class User {
 	@Email
 	//@NotNull
 	private String email;
+	
+	@Column
+	private String password;
 		
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")

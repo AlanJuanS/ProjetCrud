@@ -17,6 +17,7 @@ public class UserCreateDTO {
 	private String cpf;
 	private boolean primeiroAcesso;
 	private String email;
+	private String password;
 	
 	public UserCreateDTO(User user) {
 		super();
@@ -24,6 +25,7 @@ public class UserCreateDTO {
 		this.cpf = user.getCpf();
 		this.primeiroAcesso = user.isPrimeiroAcesso();
 		this.email = user.getEmail();
+		this.password = user.getPassword();
 	}
 
 	

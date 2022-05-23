@@ -4,7 +4,6 @@ import java.sql.Date;
 
 import com.Schedule.crm.Entity.Client;
 import com.Schedule.crm.Entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

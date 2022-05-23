@@ -23,6 +23,7 @@ public class UserDTO {
 	private String cpf;
 	private boolean primeiroAcesso;
 	private String email;
+	private String password;
 
 	public UserDTO(User user) {
 		super();
@@ -31,6 +32,7 @@ public class UserDTO {
 		this.cpf = user.getCpf();
 		this.primeiroAcesso = user.isPrimeiroAcesso();
 		this.email = user.getEmail();
+		this.password = user.getPassword();
 	}
 	
 	public static List<UserDTO> convert(List<User>user) {
